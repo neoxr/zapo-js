@@ -220,7 +220,7 @@ export function wrapAsViewOnce(message: Proto.IMessage): Proto.IMessage {
 
 export function unwrapMessage(message: Proto.IMessage): Proto.IMessage {
     let msg = message
-    for (;;) {
+    for (; ;) {
         const inner =
             msg.ephemeralMessage?.message ??
             msg.groupMentionedMessage?.message ??
@@ -250,7 +250,7 @@ function resolveMessageTypeAttrFrom(msg: Proto.IMessage): string {
         msg.eventMessage ||
         msg.encEventResponseMessage ||
         msg.secretEncryptedMessage?.secretEncType ===
-            proto.Message.SecretEncryptedMessage.SecretEncType.EVENT_EDIT
+        proto.Message.SecretEncryptedMessage.SecretEncType.EVENT_EDIT
     ) {
         return WA_STANZA_MSG_TYPES.EVENT
     }
@@ -263,9 +263,9 @@ function resolveMessageTypeAttrFrom(msg: Proto.IMessage): string {
         msg.pollCreationMessageV6 ||
         msg.pollUpdateMessage ||
         msg.secretEncryptedMessage?.secretEncType ===
-            proto.Message.SecretEncryptedMessage.SecretEncType.POLL_EDIT ||
+        proto.Message.SecretEncryptedMessage.SecretEncType.POLL_EDIT ||
         msg.secretEncryptedMessage?.secretEncType ===
-            proto.Message.SecretEncryptedMessage.SecretEncType.POLL_ADD_OPTION
+        proto.Message.SecretEncryptedMessage.SecretEncType.POLL_ADD_OPTION
     ) {
         return WA_STANZA_MSG_TYPES.POLL
     }
@@ -292,9 +292,9 @@ function resolveMessageTypeAttrFrom(msg: Proto.IMessage): string {
         msg.richResponseMessage ||
         msg.botForwardedMessage ||
         msg.secretEncryptedMessage?.secretEncType ===
-            proto.Message.SecretEncryptedMessage.SecretEncType.MESSAGE_EDIT ||
+        proto.Message.SecretEncryptedMessage.SecretEncType.MESSAGE_EDIT ||
         msg.secretEncryptedMessage?.secretEncType ===
-            proto.Message.SecretEncryptedMessage.SecretEncType.MESSAGE_SCHEDULE
+        proto.Message.SecretEncryptedMessage.SecretEncType.MESSAGE_SCHEDULE
     ) {
         return WA_STANZA_MSG_TYPES.TEXT
     }
@@ -421,6 +421,9 @@ export function resolveEncMediaType(message: Proto.IMessage): string | null {
 function resolveEncMediaTypeFrom(msg: Proto.IMessage): string | null {
     if (msg.imageMessage) return WA_ENC_MEDIA_TYPES.IMAGE
     if (msg.stickerMessage) return WA_ENC_MEDIA_TYPES.STICKER
+    if (msg.stickerMessage || msg.audioStickerMessage || msg.lottieStickerMessage) {
+        return WA_ENC_MEDIA_TYPES.STICKER
+    }
     if (msg.stickerPackMessage) return WA_ENC_MEDIA_TYPES.STICKER_PACK
     if (msg.locationMessage) {
         return msg.locationMessage.isLive
